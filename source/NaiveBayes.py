@@ -19,12 +19,13 @@ class NaiveBayes:
         
     def fit(self, y_train):
         """Calculates the prior for each class
-           ------------------------------------------------------------------
+           -----------------------------------
        
            Parameters:
+               
                y_train: 1D array of classes to predict from training data
         
-        Returns dictionary where keys are classes and values are priors"""
+           Returns dictionary where keys are classes and values are priors"""
         
         # The unique classes in the dataset
         self.labels = np.unique(y_train)
@@ -43,17 +44,18 @@ class NaiveBayes:
     def __gaussian_log_likelihood(self, row, subsetted_data, eps):
         
         """Calculates and sums the log of posteriors for each feature in a row 
-        of data in a numpy array from the Gausssian PDF
-       -----------------------------------------------------------------------
+           of data in a numpy array from the Gausssian PDF
+           -------------------------------------------------------------------
        
-       Parameters:
-           row: the row of data to calculate the gaussian log-likelihood for
-           subsetted_data: a 2D numpy array of data subsetted to a class of 
-                           interest
-           eps: a constant to add to probabilities before taking their log to 
-                avoid dividing by zero
+          Parameters:
+              
+              row: the row of data to calculate the gaussian log-likelihood for
+              subsetted_data: a 2D numpy array of data subsetted to a class of 
+                              interest
+              eps: a constant to add to probabilities before taking their log 
+                   to avoid dividing by zero
            
-       Returns the Gaussian log-likelihood for the given row of data"""
+          Returns the Gaussian log-likelihood for the given row of data"""
     
         # The sum of log probabilities for each feature
         total_log_prob = 0
@@ -80,17 +82,18 @@ class NaiveBayes:
     def __multinomial_log_likelihood(self, row, subsetted_data, smooth, eps):
         """Calculates and sums the log of posteriors for each feature in a row 
            of data in a numpy array from the Gausssian PDF
-       ------------------------------------------------------------------------------------------------------------------
+           -------------------------------------------------------------------
        
-       Parameters:
-           row: the row of data to calculate the multinomial log-likelihood for
-           subsetted_data: a 2D numpy array of data subsetted to a class of 
-                           interest
-           smooth: a smoothing parameter for Laplace smoothing
-           eps: a constant to add to probabilities before taking their log to 
-                avoid dividing by zero
+          Parameters:
+              
+              row: row of data to calculate the multinomial log-likelihood for
+              subsetted_data: a 2D numpy array of data subsetted to a class of 
+                              interest
+              smooth: a smoothing parameter for Laplace smoothing
+              eps: a constant to add to probabilities before taking their log 
+                   to avoid dividing by zero
            
-       Returns the multinomical log-likelihood for the given row of data"""
+         Returns the multinomical log-likelihood for the given row of data"""
     
         # The sum of the log probabilities for each feature
         total_log_prob = 0
@@ -118,6 +121,7 @@ class NaiveBayes:
         ---------------------------------
        
            Parameters:
+               
                x_train: input features for the training data set
                y_train: class labels for the training data set
                x_test: input features from the test data to predict the labels
@@ -133,11 +137,14 @@ class NaiveBayes:
     
         # Safety check
         if pdf not in ["multinomial", "gaussian"]:
-            raise ValueError("This Naive Bayes implementation currently only supports multinomial and Gaussian distributions")
+            raise ValueError("""This Naive Bayes implementation currently only 
+                                supports multinomial and Gaussian distributions
+                                """)
         
         # Make fit has been called
         if not self.FIT:
-            raise RuntimeError("The fit method must be called before calling predict")
+            raise RuntimeError("""The fit method must be called before calling 
+                                  predict""")
     
         # Get the priors
         priors = self.fit(y_train)
@@ -154,7 +161,8 @@ class NaiveBayes:
             # Data subsetted to each label
             subset = x_train[y_train == label]
         
-            # Applies the log likelihood to every element in every row of the test data and calculates its posterior
+            # Applies the log likelihood to every element in every row of the 
+            # test data and calculates its posterior
             if pdf == "gaussian":
                 posteriors = (priors[label] + 
                               np.apply_along_axis(
