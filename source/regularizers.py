@@ -27,3 +27,4 @@ def L2(weights):
            
        Returns the square of the L2 norm of the weight vector"""
     return np.linalg.norm(weights, ord=2)**2
+
