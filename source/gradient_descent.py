@@ -6,7 +6,8 @@ from autograd import grad
 import autograd.numpy as np
 
 
-def gradient_descent(g, alpha, max_its, w, x, y, flavor='batch', batch_size=32, 
+def gradient_descent(g, learning_rate, max_its, w, x, y, regularization=None, 
+                     lmbda=0.005, alpha=0.5, flavor='batch', batch_size=32, 
                      random_state=None):
     
     """Finds optimal weights by using gradient descent
@@ -18,7 +19,11 @@ def gradient_descent(g, alpha, max_its, w, x, y, flavor='batch', batch_size=32,
             alpha: the learning rate
             max_its: the maximum number of iteratiions to run gradient descent
             w: a numpy array of starting weights
+            x: a numpy array of features
             y: actual values
+            regularization: type of penalty to use
+            lmbda: coefficient for the penalty
+            alpha: weight of the L1 penalty if using ElasticNet
             flavor: either batch or sgd
             batch_size: the batch size if using stochastic gradient descent
             random_state: a number to set for reproducibility
@@ -53,7 +58,7 @@ def gradient_descent(g, alpha, max_its, w, x, y, flavor='batch', batch_size=32,
     gradient = grad(g)
     
     # Will hold the costs and weights after each iteration
-    cost_history = [g(w, x_sample, y_sample)]
+    cost_history = [g(w, x_sample, y_sample, regularization, lmbda, alpha)]
     weight_history = [wk]
     
     # Calculates weights by moving down the gradient
@@ -66,7 +71,7 @@ def gradient_descent(g, alpha, max_its, w, x, y, flavor='batch', batch_size=32,
             x_sample = x[:, indices]
             y_sample = y[0, indices]
         
-        wk = wk - alpha*gradient(wk, x_sample, y_sample)
+        wk = wk - learning_rate * gradient(wk, x_sample, y_sample)
         cost_history.append(g(wk, x_sample, y_sample))
         weight_history.append(wk)
         
